@@ -192,7 +192,13 @@ export async function computeNodeModuleFileSets(platformPackager: PlatformPackag
       destination = getDestinationPath(source, {src: mainMatcher.from, destination: mainMatcher.to, files: [], metadata: null as any})
     }
     else {
-      destination = mainMatcher.to + path.sep + "node_modules"
+      const index = source.indexOf(NODE_MODULES_PATTERN)
+
+      if (index < 0) {
+        destination = mainMatcher.to + path.sep + "node_modules"
+      } else {
+        destination = mainMatcher.to + path.sep + source.substring(index + 1)
+      }
     }
 
     // use main matcher patterns, so, user can exclude some files in such hoisted node modules
